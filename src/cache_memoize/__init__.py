@@ -15,6 +15,7 @@ def cache_memoize(
     timeout,
     prefix=None,
     args_rewrite=None,
+    rewrite_arg=None,
     hit_callable=None,
     miss_callable=None,
     key_generator_callable=None,
@@ -101,9 +102,9 @@ def cache_memoize(
         def _default_make_cache_key(*args, **kwargs):
             cache_key = ":".join(
                 itertools.chain(
-                    (quote(str(x)) for x in args_rewrite(*args)),
+                    (rewrite_arg(x) for x in args),
                     (
-                        "{}={}".format(quote(k), quote(str(v)))
+                        "{}={}".format(k, rewrite_arg(v))
                         for k, v in sorted(kwargs.items())
                     ),
                 )
